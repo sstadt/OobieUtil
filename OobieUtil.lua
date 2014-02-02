@@ -122,32 +122,24 @@ function OobieUtil:OnEvent(event, ...)
 			
 		end
 		
-	end
-
-	if (event=="CHAT_MSG_LOOT") then
+	elseif (event=="CHAT_MSG_LOOT") then
 		
 		if string.find(arg1, "You receive loot") and string.find(arg1, "cffa335ee") then
 			PlaySoundFile("Interface\\AddOns\\OobieUtil\\Item.ogg")
 		end
 		
-	end
-	
-	if (event=="CHAT_MSG_WHISPER") then
+	elseif (event=="CHAT_MSG_WHISPER") then
 	
 		local zoneName = GetRealZoneText()
 		if (arg1=="doobie") then
 			InviteUnit(arg2)
 		end
 		
-	end
-	
-	if (event=="DUEL_REQUESTED") then
+	elseif (event=="DUEL_REQUESTED") then
 	
 		CancelDuel()
 		
-	end
-	
-	if (event=="MERCHANT_SHOW") then
+	elseif (event=="MERCHANT_SHOW") then
 	
 		if CanMerchantRepair() then
 			local repairCost = GetRepairAllCost()
@@ -168,36 +160,26 @@ function OobieUtil:OnEvent(event, ...)
 			end
 		end
 		
-	end
-	
-	if (event=="PLAYER_XP_UPDATE") then
+	elseif (event=="PLAYER_XP_UPDATE") then
 	
 		--Set xp watch
 		SetWatchedFactionIndex(0)
 		
-	end
-	
-	if (event=="TRAINER_SHOW") then
+	elseif (event=="TRAINER_SHOW") then
 	
 		SetTrainerServiceTypeFilter("unavailable", 0)
 		
-	end
-
-	if (event=="UI_INFO_MESSAGE") and miks then
+	elseif (event=="UI_INFO_MESSAGE") and miks then
 		
 		MikSBT.DisplayMessage(arg1,MikSBT.DISPLAYTYPE_NOTIFICATION,false,255,255,0)
 
-	end
-
-	if (event=="UI_ERROR_MESSAGE") and miks then
+	elseif (event=="UI_ERROR_MESSAGE") and miks then
 	
 		if not(string.find(arg1,"not ready")) and not(string.find(arg1,"drink any more")) and not(string.find(arg1,"Another action is in progress")) then
 			MikSBT.DisplayMessage(arg1,MikSBT.DISPLAYTYPE_NOTIFICATION,false,255,0,0)
 		end
 
-	end
-
-	if (event=="UNIT_SPELLCAST_SUCCEEDED") then
+	elseif (event=="UNIT_SPELLCAST_SUCCEEDED") then
 	
 		if (string.find(arg2, "Portal:")) or (string.find(arg2, "Gate")) and (arg1 == "player") then
 			PlaySoundFile("Interface\\AddOns\\OobieUtil\\gate.ogg")
