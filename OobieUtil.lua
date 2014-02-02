@@ -84,9 +84,9 @@ end
 -- ONEVENT FUNCTION
 -- -------------------------
 	
-function OobieUtil:OnEvent(event, ...)
+function OobieUtil:OnEvent(event, arg1, arg2)
 
-	local arg1, arg2 = ...
+	--local arg1, arg2 = ...
 	
 	if (event=="CHAT_MSG_COMBAT_FACTION_CHANGE") then
 	
