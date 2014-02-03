@@ -4,7 +4,7 @@ Class Specific
 Shaman Auras
 ------------
 
-Set=Class@
+Set=Elemental@
 Aura[1]=Version:4.24.9; b:0; buffname:Flametongue/Fishing Lure; begin:6; groupany:true; bufftype:5; stance:10; texture:101; alpha:1; anim1:2; inVehicle:false; size:0.32; icon:inv_weapon_shortblade_101; g:0.0941; y:324; texmode:2; inverse:true; ismounted:false; finish:2@
 Aura[2]=Version:4.24.9; b:0.8235; buffname:Lava Burst; r:0.8392; begin:1; x:-163; groupany:true; bufftype:15; stance:10; texture:163; alpha:1; anim1:4; inVehicle:false; combat:true; size:1.01; icon:Spell_Shaman_LavaBurst; g:0.851; texmode:2; ismounted:false@
 Aura[3]=Version:4.24.9; b:0; buffname:Lightning Shield/Water Shield; begin:2; x:-282; groupany:true; stance:10; texture:17; alpha:1; owntex:true; inVehicle:false; size:0.15; icon:Spell_Nature_LightningShield; g:0.0157; y:23; texmode:2; inverse:true; ismounted:false; finish:2@
@@ -57,16 +57,16 @@ Global
 Raid Auras
 ----------
 
-Set=Global 1@
-Aura[121]=Version:4.3.8; b:0.1765; g:0; icon:Spell_Shadow_MindRot; buffname:Silence; begin:2; bufftype:3; texture:39; alpha:1; y:-52; texmode:2; finish:2@
-Aura[122]=Version:4.3.8; b:0.3804; anim1:2; g:0.7373; icon:Spell_Misc_Food; buffname:Well Fed; r:0.8118; begin:6; x:-173; customname:Bread.tga; texture:185; alpha:1; customtex:true; size:0.4; inRaid:true; y:324; texmode:2; inverse:true; finish:2@
-Aura[123]=Version:4.3.8; b:0.7647; anim1:2; g:0.8745; icon:inv_potione_6; buffname:Flask of the Draconic Mind/Flask of Titanic Strength; r:0.7647; begin:6; x:156; customname:Flask.tga; texture:114; alpha:1; symetrie:1; customtex:true; size:0.39; inRaid:true; y:317; texmode:2; inverse:true; finish:2@
-Aura[124]=Version:4.3.8; b:0; anim1:4; g:0.9882; icon:Ability_Shaman_Heroism; buffname:Heroism/Time Warp/Bloodlust/Ancient Hysteria; begin:2; texture:33; alpha:0.45; size:5; torsion:1.4; y:142; texmode:2; finish:2; timer.h:5.21; timer.Texture:AccidentalPresidency; timer.enabled:true; timer.cents:false; timer.y:-283; timer.x:-790@
+Set=Raid@
+Aura[121]=Version:4.24.9; b:0.1765; buffname:Silence; begin:2; bufftype:3; texture:39; alpha:1; icon:Spell_Shadow_MindRot; g:0; y:-52; texmode:2; finish:2@
+Aura[122]=Version:4.24.9; b:0.3804; buffname:Well Fed; r:0.8118; begin:6; x:-173; customname:Bread.tga; texture:185; alpha:1; anim1:2; size:0.4; off:true; icon:Spell_Misc_Food; customtex:true; g:0.7373; y:324; inRaid:true; texmode:2; inverse:true; finish:2@
+Aura[123]=Version:4.24.9; b:0.7647; buffname:Flask of the Draconic Mind/Flask of Titanic Strength; r:0.7647; begin:6; x:156; customname:Flask.tga; texture:114; alpha:1; symetrie:1; anim1:2; size:0.39; off:true; icon:inv_potione_6; customtex:true; g:0.8745; y:317; inRaid:true; texmode:2; inverse:true; finish:2@
+Aura[124]=Version:4.24.9; b:0; buffname:Heroism/Time Warp/Bloodlust/Ancient Hysteria; begin:2; texture:33; alpha:0.45; anim1:4; size:5; icon:Ability_Shaman_Heroism; g:0.9882; y:142; torsion:1.4; texmode:2; finish:2; timer.h:5.21; timer.Texture:AccidentalPresidency; timer.enabled:true; timer.cents:false; timer.y:-283; timer.x:-790@
 
 PvP Auras
 ---------
 
-Set=Global 2@
+Set=PvP@
 Aura[145]=Version:4.24.9; b:0.4706; blendmode:Add; target:true; buffname:Divine Shield; r:0.902; begin:1; x:281; texture:6; anim1:5; size:1.01; wowtex:true; icon:Spell_Holy_DivineIntervention; PvP:true; y:-186; torsion:1.41; texmode:1@
 Aura[146]=Version:4.24.9; b:0.9725; blendmode:Add; mcd:7.4837; target:true; mcy:-0.0067; buffname:Innervate; r:0.898; begin:2; x:279; modelpath:37526; texture:175; alpha:0.5; symetrie:1; anim1:5; mcp:-0.0921; size:1.13; rotate:275; icon:Spell_Nature_Lightning; PvP:true; y:-185; torsion:1.34; anim2:1; texmode:1; finish:2@
 Aura[147]=Version:4.24.9; b:0.9216; target:true; buffname:Spell Reflection; r:0.9608; begin:2; x:284; texture:21; size:1.2; icon:Ability_Warrior_ShieldReflection; y:-181; torsion:1.5; texmode:1; finish:2@
