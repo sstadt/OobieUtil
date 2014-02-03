@@ -59,7 +59,6 @@ actions = {
 		
 		if UnitLevel("player") == 90 then
 			--Set Faction watched when reputation increases
-			p(GetNumFactions())
 			for factionIndex=1,GetNumFactions() do
 				local factionName = GetFactionInfo(factionIndex)
 				if (string.find(factionLookUp,factionName)) then
