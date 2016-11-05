@@ -133,7 +133,7 @@ local OobieUtil_actions = {
 					RepairAllItems()
 				end
 
-				OobieUtil_Notify("Equipment repaired at a cost of "..repairString)
+				OobieUtil_Notify("Equipment repaired at a cost of |cFFffffff"..repairString.."|r")
 
 			end
 		end
