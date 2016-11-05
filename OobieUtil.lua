@@ -109,7 +109,6 @@ local OobieUtil_actions = {
 				for slot = 1, GetContainerNumSlots(bag), 1 do
 					local name = GetContainerItemLink(bag,slot)
 					if name and string.find(name,"ff9d9d9d") then
-						DEFAULT_CHAT_FRAME:AddMessage("Selling "..name)
 						UseContainerItem(bag,slot)
 					end
 				end
@@ -211,17 +210,19 @@ end
 -- OOBIEUTIL FUNCTIONS
 -- -------------------------
 
+-- OobieUtil_Notify
+-- Use for outputting notifications to the chat window
 function OobieUtil_Notify(msg)
-	DEFAULT_CHAT_FRAME:AddMessage("|cFFf1bb17OobieUtil:|r "..msg, .1, .9, .8)
+	DEFAULT_CHAT_FRAME:AddMessage("|cFFf1bb17OobieUtil|r "..msg, .1, .9, .8)
 end
 
 -- p FUNCTION
 -- Print.  Handy for debugging.
 function p(msg)
-	DEFAULT_CHAT_FRAME:AddMessage(msg, 1, .4, .4)
+	DEFAULT_CHAT_FRAME:AddMessage("|cFFf1bb17OobieUtil[Debug]|r "..msg, 1, .4, .4)
 end
 
 
 
-
+-- All Done!
 OobieUtil_Notify("Loaded")
