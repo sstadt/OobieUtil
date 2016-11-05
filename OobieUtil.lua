@@ -5,7 +5,7 @@
 -- Faction watch timeout
 -- Time in seconds until faction watch is turned off after a faction update
 -- 60 = 1 minute, 900 = 15 min, etc.
-local OobieUtil_FactionWatchTimeout = 600
+local OobieUtil_FactionWatchTimeout = 0
 
 -- Auto repair
 -- 1 for on, nil for off
@@ -14,6 +14,10 @@ local OobieUtil_AutoRepair = 1
 -- Auto repair from guild bank, if available
 -- 1 for on, nil for off
 local OobieUtil_GuildBankAutoRepair = nil
+
+-- Auto sell grey items at a vendor
+-- 1 for on, nil for off
+local OobieUtil_SellGreyItems = 1
 
 -- ------------------------
 -- END CONFIG: DO NOT EDIT
@@ -37,27 +41,27 @@ local miks = false
 -- DISABLE/MOVE BLIZZ STUFF
 -- -------------------------
 
-if IsAddOnLoaded("MikScrollingBattleText") then
-	UIErrorsFrame:Hide()
-	miks = true
-end
+-- if IsAddOnLoaded("MikScrollingBattleText") then
+-- 	UIErrorsFrame:Hide()
+-- 	miks = true
+-- end
 
 -- ------------------------
 -- EVENT ACTIONS
 -- ------------------------
 
-actions = {
+local OobieUtil_actions = {
 
 	["CHAT_MSG_COMBAT_FACTION_CHANGE"] = function(arg1, arg2)
 		local factionToWatch = nil
-		
+
 		if string.find(arg1, "Guild") then
 			factionLookUp = GetGuildInfo("player")
 		else
 			factionLookUp = arg1
 		end
-		
-		if UnitLevel("player") == 90 then
+
+		if UnitLevel("player") == 110 then
 			--Set Faction watched when reputation increases
 			for factionIndex=1,GetNumFactions() do
 				local factionName = GetFactionInfo(factionIndex)
@@ -67,17 +71,17 @@ actions = {
 					end
 				end
 			end
-			
+
 			if factionToWatch ~= nil then
 				local _, _, _, _, _, factionValue = GetFactionInfo(factionToWatch)
-			
+
 				if factionValue < 42000 then
 					OobieUtil_FactionWatchActive = 1
 					OobieUtil.TimeSinceLastUpdate = 0
 					SetWatchedFactionIndex(factionToWatch)
 				end
 			end
-			
+
 		end
 	end,
 
@@ -99,22 +103,39 @@ actions = {
 	end,
 
 	["MERCHANT_SHOW"] = function(arg1, arg2)
+		-- sell all grey items
+		if OobieUtil_SellGreyItems then
+			for bag = 0,4,1 do
+				for slot = 1, GetContainerNumSlots(bag), 1 do
+					local name = GetContainerItemLink(bag,slot)
+					if name and string.find(name,"ff9d9d9d") then
+						DEFAULT_CHAT_FRAME:AddMessage("Selling "..name)
+						UseContainerItem(bag,slot)
+					end
+				end
+			end
+
+			-- todo, total up the cost and dd that to the output
+			OobieUtil_Notify("Sold Grey Items")
+		end
+
+		-- auto repair
 		if CanMerchantRepair() then
 			local repairCost = GetRepairAllCost()
-			
+
 			if repairCost > 0 then
-			
+
 				local repairString = GetCoinText(repairCost," ")
-				
+
 				if CanGuildBankRepair() and OobieUtil_GuildBankAutoRepair then
 					RepairAllItems(1)
 					repairString = repairString.." (Guild Funds)"
 				else
 					RepairAllItems()
 				end
-				
-				DEFAULT_CHAT_FRAME:AddMessage("Equipment repaired at a cost of "..repairString, 1, 1, 0)
-				
+
+				OobieUtil_Notify("Equipment repaired at a cost of "..repairString)
+
 			end
 		end
 	end,
@@ -123,19 +144,19 @@ actions = {
 		SetWatchedFactionIndex(0)
 	end,
 
-	["TRAINER_SHOW"] = function(arg1, arg2)
-		SetTrainerServiceTypeFilter("unavailable", 0)
-	end,
+	-- ["TRAINER_SHOW"] = function(arg1, arg2)
+	-- 	SetTrainerServiceTypeFilter("unavailable", 0)
+	-- end,
 
-	["UI_ERROR_MESSAGE"] = function(arg1, arg2)
-		MikSBT.DisplayMessage(arg1,MikSBT.DISPLAYTYPE_NOTIFICATION,false,255,255,0)
-	end,
-
-	["UI_INFO_MESSAGE"] = function(arg1, arg2)
-		if not(string.find(arg1,"not ready")) and not(string.find(arg1,"drink any more")) and not(string.find(arg1,"Another action is in progress")) then
-			MikSBT.DisplayMessage(arg1,MikSBT.DISPLAYTYPE_NOTIFICATION,false,255,0,0)
-		end
-	end,
+	-- ["UI_ERROR_MESSAGE"] = function(arg1, arg2)
+	-- 	MikSBT.DisplayMessage(arg1,MikSBT.DISPLAYTYPE_NOTIFICATION,false,255,255,0)
+	-- end,
+	--
+	-- ["UI_INFO_MESSAGE"] = function(arg1, arg2)
+	-- 	if not(string.find(arg1,"not ready")) and not(string.find(arg1,"drink any more")) and not(string.find(arg1,"Another action is in progress")) then
+	-- 		MikSBT.DisplayMessage(arg1,MikSBT.DISPLAYTYPE_NOTIFICATION,false,255,0,0)
+	-- 	end
+	-- end,
 
 	["UNIT_SPELLCAST_SUCCEEDED"] = function(arg1, arg2)
 		if (string.find(arg2, "Portal:")) or (string.find(arg2, "Gate")) and (arg1 == "player") then
@@ -150,7 +171,7 @@ actions = {
 
 function OobieUtil_OnLoad()
 
-	for event, action in pairs(actions) do
+	for event, action in pairs(OobieUtil_actions) do
 		OobieUtil:RegisterEvent(event)
 	end
 
@@ -163,8 +184,8 @@ end
 -- -------------------------
 
 function OobieUtil_OnUpdate(elapsed)
-	
-	if OobieUtil_FactionWatchActive then
+
+	if OobieUtil_FactionWatchActive and OobieUtil_FactionWatchTimeout > 0 then
 		OobieUtil.TimeSinceLastUpdate = OobieUtil.TimeSinceLastUpdate + elapsed
 		if (OobieUtil.TimeSinceLastUpdate > OobieUtil_FactionWatchTimeout) then
 			SetWatchedFactionIndex(0)
@@ -178,10 +199,10 @@ end
 -- -------------------------
 -- ONEVENT FUNCTION
 -- -------------------------
-	
+
 function OobieUtil:OnEvent(event, arg1, arg2)
 
-	actions[event](arg1,arg2)
+	OobieUtil_actions[event](arg1,arg2)
 
 end
 
@@ -190,9 +211,17 @@ end
 -- OOBIEUTIL FUNCTIONS
 -- -------------------------
 
+function OobieUtil_Notify(msg)
+	DEFAULT_CHAT_FRAME:AddMessage("|cFFf1bb17OobieUtil:|r "..msg, .1, .9, .8)
+end
+
 -- p FUNCTION
 -- Print.  Handy for debugging.
 function p(msg)
 	DEFAULT_CHAT_FRAME:AddMessage(msg, 1, .4, .4)
 end
 
+
+
+
+OobieUtil_Notify("Loaded")
