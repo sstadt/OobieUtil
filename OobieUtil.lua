@@ -103,19 +103,24 @@ local OobieUtil_actions = {
 	end,
 
 	["MERCHANT_SHOW"] = function(arg1, arg2)
+		local itemsRepaired = nil
+
 		-- sell all grey items
 		if OobieUtil_SellGreyItems then
 			for bag = 0,4,1 do
 				for slot = 1, GetContainerNumSlots(bag), 1 do
 					local name = GetContainerItemLink(bag,slot)
 					if name and string.find(name,"ff9d9d9d") then
+						itemsRepaired = 1
 						UseContainerItem(bag,slot)
 					end
 				end
 			end
 
-			-- todo, total up the cost and dd that to the output
-			OobieUtil_Notify("Sold Grey Items")
+			if itemsRepaired then
+				-- todo, total up the cost and dd that to the output
+				OobieUtil_Notify("Sold Grey Items")
+			end
 		end
 
 		-- auto repair
